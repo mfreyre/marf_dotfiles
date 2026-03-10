@@ -1,58 +1,133 @@
-# dotfile setup that i like
+# marf dotfiles
 
-This repo contains configuration files for setting up your terminal with a few great tools that should make your life easier.
+My personal configuration files for macOS. Includes setup for zsh, vim, tmux, git, VS Code, Karabiner-Elements, and code formatting tools.
 
-## Setting it up
+## What's Included
 
-### Host
+| File/Folder | What It Configures |
+|---|---|
+| `zshrc` | Zsh shell — aliases, key bindings, prompt theme, history, nvm auto-switching |
+| `vimrc` | Vim — plugins (via vim-plug), key mappings, linting (ALE), theme (seoul256) |
+| `tmux.conf` | Tmux — prefix key (`Ctrl+Space`), pane/window bindings, status bar |
+| `gitconfig` | Git — aliases (`st`, `co`, `br`, `rpull`), credential helper, editor |
+| `gitignore` | Global git ignores — swap files, `.DS_Store`, vim sessions |
+| `karabiner.json` | Karabiner-Elements — Caps Lock acts as Ctrl (Escape if tapped alone) |
+| `eslintrc.json` | ESLint — JS/React linting with Prettier integration |
+| `prettierrc` | Prettier — formatting rules (80 chars, 2-space tabs, trailing commas) |
+| `vscode/settings.json` | VS Code — format on save, Prettier as default formatter |
+| `packages/homebrew` | List of Homebrew packages to install |
+| `packages/npm` | List of global npm packages to install |
+| `bin/` | Custom scripts (e.g. tmux window status formatter) |
+| `zsh/` | Zsh plugins — oh-my-zsh completions/git/themes, zsh-syntax-highlighting |
+| `agignore` | Silver Searcher ignore rules |
 
-- Clone this repo to your home directory
-  - `git clone git@github.etsycorp.com:mfreyre/dotfiles.git`
-- Download and install [iTerm2](https://www.iterm2.com/downloads.html)
-- Download and install [SMYCK](http://color.smyck.org/)
-  - Download and extract zip file
-  - Ctrl + click on _colors_, then click _Open_
-  - Double click on _Smyck.itermcolors_
-- In iTerm2, go to `Preferences > Profiles > Colors > Color Presets` and select _Smyck_
+## Setup
 
-### VM
+### 1. Clone the repo
 
-- Create _zsh_ folders and symlink some things
-
-```
-cd ~/
-mkdir .zsh
-cd .zsh
-mkdir oh-my-zsh
-mkdir zsh-syntax-highlighting
-ln -s ~/dotfiles/zsh/oh-my-zsh/completion.zsh ~/.zsh/oh-my-zsh/completion.zsh
-ln -s ~/dotfiles/zsh/oh-my-zsh/git.zsh ~/.zsh/oh-my-zsh/git.zsh
-ln -s ~/dotfiles/zsh/oh-my-zsh/themes-and-appearance.zsh ~/.zsh/oh-my-zsh/themes-and-appearance.zsh
-ln -s ~/dotfiles/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh .zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-ln -s ~/dotfiles/zshrc ~/.zshrc
+```sh
+git clone https://github.com/mfreyre/marf_dotfiles.git ~/marf_dotfiles
 ```
 
-- Install [_vim-plug_](https://github.com/junegunn/vim-plug)
-  - Run the following _curl_ command
-  - Open _vim_ and run `:PlugInstall`
+### 2. Symlink config files
 
+Each file needs to be symlinked to your home directory with a `.` prefix:
+
+```sh
+# Shell
+ln -sf ~/marf_dotfiles/zshrc ~/.zshrc
+ln -sf ~/marf_dotfiles/gitconfig ~/.gitconfig
+ln -sf ~/marf_dotfiles/gitignore ~/.gitignore
+
+# Vim
+ln -sf ~/marf_dotfiles/vimrc ~/.vimrc
+
+# Tmux
+ln -sf ~/marf_dotfiles/tmux.conf ~/.tmux.conf
+
+# Code formatting
+ln -sf ~/marf_dotfiles/eslintrc.json ~/.eslintrc.json
+ln -sf ~/marf_dotfiles/prettierrc ~/.prettierrc
+ln -sf ~/marf_dotfiles/agignore ~/.agignore
+
+# Custom scripts
+ln -sf ~/marf_dotfiles/bin/format-tmux-window-status ~/.bin/format-tmux-window-status
 ```
+
+### 3. Set up zsh plugins
+
+```sh
+mkdir -p ~/.zsh/oh-my-zsh ~/.zsh/zsh-syntax-highlighting
+
+ln -sf ~/marf_dotfiles/zsh/oh-my-zsh/completion.zsh ~/.zsh/oh-my-zsh/completion.zsh
+ln -sf ~/marf_dotfiles/zsh/oh-my-zsh/git.zsh ~/.zsh/oh-my-zsh/git.zsh
+ln -sf ~/marf_dotfiles/zsh/oh-my-zsh/themes-and-appearance.zsh ~/.zsh/oh-my-zsh/themes-and-appearance.zsh
+ln -sf ~/marf_dotfiles/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+```
+
+### 4. Install Homebrew packages
+
+```sh
+xargs brew install < ~/marf_dotfiles/packages/homebrew
+```
+
+### 5. Install global npm packages
+
+```sh
+xargs npm install -g < ~/marf_dotfiles/packages/npm
+```
+
+### 6. Install Vim plugins
+
+Install [vim-plug](https://github.com/junegunn/vim-plug):
+
+```sh
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-- Symlink _vimrc_
+Then open Vim and run `:PlugInstall`.
 
+### 7. Karabiner-Elements (optional)
+
+Install [Karabiner-Elements](https://karabiner-elements.pqrs.org/), then copy or symlink the config:
+
+```sh
+mkdir -p ~/.config/karabiner
+ln -sf ~/marf_dotfiles/karabiner.json ~/.config/karabiner/karabiner.json
 ```
-ln -s ~/dotfiles/vimrc ~/.vimrc
+
+### 8. VS Code (optional)
+
+Copy or symlink the settings:
+
+```sh
+# macOS
+ln -sf ~/marf_dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
 ```
 
-## What you get
+## Key Shortcuts
 
-Here are a few examples of the things you get with this setup:
+### Zsh
+- Vi mode enabled (`bindkey -v`)
+- `Ctrl+F` / `Ctrl+B` — forward/backward word
+- `Ctrl+A` / `Ctrl+E` — beginning/end of line
 
-- `cd ~/mydir1/mydir2`
-  - check that it’s not case sensitive
-  - git branch in the prompt
-  - git touch a file to see that a mark shows up in the prompt
-  - command highlightingll top-level files and directories need to be symlinked to $HOME/.{name}
+### Vim
+- Leader key: `Space`
+- `Space+d` — fuzzy find git files (fzf)
+- `Space+l` — fuzzy find lines
+- `Space+x` — toggle comment
+- `Space+a` — toggle ALE linting
+- `Ctrl+J` / `Ctrl+K` — previous/next buffer
+
+### Tmux
+- Prefix: `Ctrl+Space`
+- `Prefix+|` — vertical split
+- `Prefix+-` — horizontal split
+- `Prefix+h/j/k/l` — navigate panes
+- `Prefix+H/J/K/L` — resize panes
+
+## License
+
+MIT

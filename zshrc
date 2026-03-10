@@ -11,6 +11,8 @@ alias ll="ls -lh"
 alias lla="ls -lAh"
 alias cdr='cd $(git rev-parse --show-toplevel 2>/dev/null)'
 alias pbcopy='xclip -sel clip'
+alias watch="yarn test:ui:unit:watch"
+alias esfix="npx eslint --fix"
 
 # git aliases
 alias gcm="git commit -m"
@@ -19,12 +21,9 @@ alias gists="git diff --staged | gist -t diff"
 alias gcan="git commit --amend --no-edit"
 alias gca="git commit --amend"
 alias gco="git checkout"
+alias gcb="git checkout -b"
 alias review='git_switch_push() { git switch -c $(date +%Y%m%d)-$1 && git push --set-upstream origin $(date +%Y%m%d)-$1; }; git_switch_push'
 
-#aliases
-alias vsql="/opt/vertica/bin/vsql -h vertica-prod -U mfreyre"
-alias notebook="jupyter notebook --ip=0.0.0.0 --port=5678 --no-browser"
-alias byebye="/usr/local/Cellar/pipes-sh/1.3.0/bin/pipes.sh"
 
 # key-bindings
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
@@ -66,7 +65,7 @@ fi
 
 # history
 [[ -z "$HISTFILE" ]] && export HISTFILE=$HOME/.zsh_history
-export HISTSIZE=20000
+export HISTSIZE=50000
 export SAVEHIST=$HISTSIZE
 
 setopt append_history
@@ -121,3 +120,41 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/opt/php@7.1/bin:$PATH"
 export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
 export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+eval "$(direnv hook zsh)"
