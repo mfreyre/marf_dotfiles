@@ -1,8 +1,0 @@
-[user]
-	name = mfreyre
-
-[alias]
-	rpull = pull --rebase
-[push]
-	autoSetupRemote = true
-	default = current

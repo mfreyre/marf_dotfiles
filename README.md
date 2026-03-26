@@ -6,7 +6,7 @@ My personal configuration files for macOS. Includes setup for zsh, vim, tmux, gi
 
 | File/Folder | What It Configures |
 |---|---|
-| `zshrc` | Zsh shell — aliases, key bindings, prompt theme, history, nvm auto-switching |
+| `zshrc` | Zsh shell — aliases, key bindings, prompt theme, history, fnm auto-switching |
 | `vimrc` | Vim — plugins (via vim-plug), key mappings, linting (ALE), theme (seoul256) |
 | `tmux.conf` | Tmux — prefix key (`Ctrl+Space`), pane/window bindings, status bar |
 | `gitconfig` | Git — aliases (`st`, `co`, `br`, `rpull`), credential helper, editor |
@@ -20,21 +20,33 @@ My personal configuration files for macOS. Includes setup for zsh, vim, tmux, gi
 | `bin/` | Custom scripts (e.g. tmux window status formatter) |
 | `zsh/` | Zsh plugins — oh-my-zsh completions/git/themes, zsh-syntax-highlighting |
 | `agignore` | Silver Searcher ignore rules |
+| `install.sh` | Automated setup script — symlinks, packages, vim-plug |
 
 ## Setup
 
-### 1. Clone the repo
+### Quick Start
 
 ```sh
 git clone https://github.com/mfreyre/marf_dotfiles.git ~/marf_dotfiles
+cd ~/marf_dotfiles
+./install.sh
 ```
 
-### 2. Symlink config files
+The install script will:
+- Symlink all config files to their expected locations
+- Install Homebrew packages (fzf, ripgrep, fnm, tmux, vim, etc.)
+- Install global npm packages
+- Install vim-plug (run `:PlugInstall` in Vim afterward)
+- Optionally set up Karabiner-Elements and VS Code configs if installed
 
-Each file needs to be symlinked to your home directory with a `.` prefix:
+### Manual Setup
+
+If you prefer to set things up individually:
+
+#### Symlink config files
 
 ```sh
-# Shell
+# Shell & git
 ln -sf ~/marf_dotfiles/zshrc ~/.zshrc
 ln -sf ~/marf_dotfiles/gitconfig ~/.gitconfig
 ln -sf ~/marf_dotfiles/gitignore ~/.gitignore
@@ -51,10 +63,11 @@ ln -sf ~/marf_dotfiles/prettierrc ~/.prettierrc
 ln -sf ~/marf_dotfiles/agignore ~/.agignore
 
 # Custom scripts
+mkdir -p ~/.bin
 ln -sf ~/marf_dotfiles/bin/format-tmux-window-status ~/.bin/format-tmux-window-status
 ```
 
-### 3. Set up zsh plugins
+#### Set up zsh plugins
 
 ```sh
 mkdir -p ~/.zsh/oh-my-zsh ~/.zsh/zsh-syntax-highlighting
@@ -65,21 +78,14 @@ ln -sf ~/marf_dotfiles/zsh/oh-my-zsh/themes-and-appearance.zsh ~/.zsh/oh-my-zsh/
 ln -sf ~/marf_dotfiles/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ```
 
-### 4. Install Homebrew packages
+#### Install packages
 
 ```sh
 xargs brew install < ~/marf_dotfiles/packages/homebrew
-```
-
-### 5. Install global npm packages
-
-```sh
 xargs npm install -g < ~/marf_dotfiles/packages/npm
 ```
 
-### 6. Install Vim plugins
-
-Install [vim-plug](https://github.com/junegunn/vim-plug):
+#### Install Vim plugins
 
 ```sh
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -88,21 +94,18 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 Then open Vim and run `:PlugInstall`.
 
-### 7. Karabiner-Elements (optional)
+#### Karabiner-Elements (optional)
 
-Install [Karabiner-Elements](https://karabiner-elements.pqrs.org/), then copy or symlink the config:
+Install [Karabiner-Elements](https://karabiner-elements.pqrs.org/), then:
 
 ```sh
 mkdir -p ~/.config/karabiner
 ln -sf ~/marf_dotfiles/karabiner.json ~/.config/karabiner/karabiner.json
 ```
 
-### 8. VS Code (optional)
-
-Copy or symlink the settings:
+#### VS Code (optional)
 
 ```sh
-# macOS
 ln -sf ~/marf_dotfiles/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
 ```
 

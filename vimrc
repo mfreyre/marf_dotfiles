@@ -13,10 +13,9 @@ Plug 'junegunn/seoul256.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sleuth'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 " filetype-specific plugins
-Plug 'jonlai/yajs.vim'
-Plug 'mxw/vim-jsx'
+Plug 'maxmellon/vim-jsx-pretty'
 
 call plug#end()
 
