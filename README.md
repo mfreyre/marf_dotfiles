@@ -103,6 +103,10 @@ mkdir -p ~/.config/karabiner
 ln -sf ~/marf_dotfiles/karabiner.json ~/.config/karabiner/karabiner.json
 ```
 
+#### iTerm2 (recommended)
+
+To enable pane-aware text selection in tmux, go to **Preferences → Profiles → Terminal** and check **"Enable mouse reporting"**. This lets tmux handle selections within individual panes. Hold **Option** while clicking to bypass tmux and select across the full terminal width.
+
 #### VS Code (optional)
 
 ```sh
