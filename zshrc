@@ -1,4 +1,5 @@
 # general settings
+export OMNI_LINT_ON_COMMIT=1
 stty -ixon
 [[ ":$PATH:" != *":$HOME/.bin:"* ]] && export PATH="$PATH:$HOME/.bin"
 export PAGER="less"

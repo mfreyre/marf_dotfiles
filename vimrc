@@ -6,12 +6,16 @@ Plug 'bling/vim-bufferline'
 Plug 'easymotion/vim-easymotion'
 Plug 'ervandew/supertab'
 Plug 'itchyny/lightline.vim'
-Plug '~/.fzf'
+Plug '/opt/homebrew/opt/fzf'
 Plug 'junegunn/fzf.vim'
 " Plug 'jonlai/smyck-vim'
 Plug 'junegunn/seoul256.vim'
+Plug 'tssm/fairyfloss.vim'
+Plug 'morhetz/gruvbox'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'dense-analysis/ale'
 " filetype-specific plugins
@@ -48,8 +52,10 @@ autocmd InsertEnter,InsertLeave * :set invrelativenumber
 
 " color scheme
 set t_Co=256
-" colorscheme smyck
-color seoul256
+set termguicolors
+set background=dark
+let g:gruvbox_contrast_dark = 'hard'
+color gruvbox
 set colorcolumn=81,101
 highlight ColorColumn ctermbg=236
 highlight SignColumn cterm=NONE ctermbg=NONE
@@ -71,7 +77,7 @@ vnoremap <c-k> <esc>:bn<cr>
 nnoremap <leader>g :w<cr>
 
 " gitgutter
-let g:gitgutter_async = 0
+let g:gitgutter_async = 1
 
 "slime
 let g:slime_target="tmux"
@@ -106,14 +112,27 @@ highlight ALEStyleWarningSign ctermfg=0 ctermbg=11
 " linters/fixers/ignores
 let g:ale_linters = {
 \     'javascript': ['eslint'],
+\     'typescript': ['eslint'],
+\     'typescriptreact': ['eslint'],
 \     'php': ['phpcs'],
 \     'bash': ['shellcheck'],
 \     'zsh': ['shellcheck'],
 \     'sh': ['shellcheck']
 \   }
 let g:ale_fixers = {
-\     'javascript': ['prettier']
+\     'javascript': ['eslint', 'prettier'],
+\     'typescript': ['eslint', 'oxfmt'],
+\     'typescriptreact': ['eslint', 'oxfmt']
 \   }
+
+" oxfmt custom fixer for ALE
+function! OxfmtFix(buffer) abort
+  return {
+  \   'command': 'oxfmt --stdin-filepath %s'
+  \ }
+endfunction
+call ale#fix#registry#Add('oxfmt', 'OxfmtFix', ['typescript', 'typescriptreact', 'javascript'], 'oxfmt')
+let g:ale_fix_on_save = 1
 let g:ale_pattern_options = {
 \     '\.min\.js$': { 'ale_linters': [], 'ale_fixers': [] },
 \     '\.min\.css$': { 'ale_linters': [], 'ale_fixers': [] }
@@ -159,7 +178,7 @@ let g:lightline = {
 \       'fugitive': 'LightlineFugitive',
 \       'alestatus': 'LightlineALEStatus'
 \     },
-\     'colorscheme': 'seoul256',
+\     'colorscheme': 'gruvbox',
 \   }
 
 " displays a buffer-list using vim-bufferline in lightline's tabline
